@@ -16,14 +16,14 @@ export class AddTutorialComponent {
     title: '',
     description: '',
     published: false,
-    fields: undefined
+    fields: null
   };
   submitted = false;
 
   constructor(private apiService: ApiService) {}
 
   saveTutorial(): void {
-    this.apiService.post<Tutorial>('api/tutorials/', this.tutorial).subscribe({
+    this.apiService.post<Tutorial>('api/incomes/', this.tutorial).subscribe({
       next: (res) => {
         console.log('Tutorial added:', res);
         this.submitted = true;

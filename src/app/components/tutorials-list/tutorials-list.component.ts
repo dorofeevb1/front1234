@@ -23,14 +23,14 @@ export class TutorialsListComponent implements OnInit {
   }
 
   getAllTutorials(): void {
-    this.apiService.get<any[]>('api/tutorials').subscribe({
+    this.apiService.get<any[]>('api/expenses/').subscribe({
       next: (data) => this.tutorials = data.map(t => ({ id: t.pk, ...t.fields })),
       error: (err) => console.error('Error fetching tutorials:', err)
     });
   }
 
   getPublishedTutorials(): void {
-    this.apiService.get<any[]>('api/tutorials/published').subscribe({
+    this.apiService.get<any[]>('api/expenses//published').subscribe({
       next: (data) => this.publishedTutorials = data.map(t => ({ id: t.pk, ...t.fields })),
       error: (err) => console.error('Error fetching published tutorials:', err)
     });

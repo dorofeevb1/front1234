@@ -7,13 +7,13 @@ import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
 
-    { path: 'add-tutorial', component: AddTutorialComponent },
+    { path: 'incomes', component: AddTutorialComponent },
     { path: 'tutorial-details', component: TutorialDetailsComponent },
-    { path: 'tutorial-list', component: TutorialsListComponent },
+    { path: 'expenses', component: TutorialsListComponent },
     // { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '', redirectTo: '/add-tutorial', pathMatch: 'full' },
+    { path: '', redirectTo: '/incomes', pathMatch: 'full' },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
-    { path: '**', redirectTo: '/add-tutorial' }
-    
+    { path: '**', redirectTo: '/incomes' }
+
 ];
