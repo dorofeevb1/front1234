@@ -1,57 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
-import { Tutorial } from '../../shared/models/tutorial.model';
+import { Analytics } from '../../shared/models/analytics.model';
+import { FormsModule } from '@angular/forms';  // Для ngModel
 
 @Component({
-  selector: 'app-tutorial-details',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule], // Добавляем RouterModule для маршрутов
-  templateUrl: './tutorial-details.component.html',
-  styleUrls: ['./tutorial-details.component.scss']
+    selector: 'app-tutorial-details',
+    standalone: true,
+    imports: [CommonModule, FormsModule],  // Добавляем FormsModule
+    templateUrl: './tutorial-details.component.html',
+    styleUrls: ['./tutorial-details.component.scss']
 })
 export class TutorialDetailsComponent implements OnInit {
-  tutorial: Tutorial | null = null;
+    analytics: Analytics | null = null;
+    selectedPeriod: string = 'all';  // Значение по умолчанию
 
-  constructor(
-    private apiService: ApiService,
-    private route: ActivatedRoute
-  ) {}
+    constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.getTutorial(+id);
+    ngOnInit(): void {
+        this.loadAnalytics();
     }
-  }
 
-  getTutorial(id: number): void {
-    this.apiService.get<Tutorial>(`api/tutorials/${id}`).subscribe({
-      next: (data) => this.tutorial = { id, ...data },
-      error: (err) => console.error('Error fetching tutorial:', err)
-    });
-  }
-
-  updateTutorial(): void {
-    if (this.tutorial?.id) {
-      this.apiService.put<Tutorial>(`api/tutorials/${this.tutorial.id}`, this.tutorial).subscribe({
-        next: () => console.log('Tutorial updated'),
-        error: (err) => console.error('Error updating tutorial:', err)
-      });
+    loadAnalytics(): void {
+        this.apiService.get<Analytics>(`api/analytics/?period=${this.selectedPeriod}`).subscribe({
+            next: (res) => {
+                this.analytics = res;
+            },
+            error: (err) => console.error('Error loading analytics:', err)
+        });
     }
-  }
 
-  deleteTutorial(): void {
-    if (this.tutorial?.id) {
-      this.apiService.delete(`api/tutorials/${this.tutorial.id}`).subscribe({
-        next: () => {
-          console.log('Tutorial deleted');
-          this.tutorial = null;
-        },
-        error: (err) => console.error('Error deleting tutorial:', err)
-      });
+    onPeriodChange(): void {
+        this.loadAnalytics();  // Перезагружаем аналитику при смене периода
     }
-  }
 }

@@ -1,17 +1,54 @@
-<div class="tutorials-list">
-    <h2>All Tutorials</h2>
-    <ul>
-      <li *ngFor="let tutorial of tutorials">
-        <a [routerLink]="['/tutorial', tutorial.id]">
-          {{ tutorial.title }} (Published: {{ tutorial.published ? 'Yes' : 'No' }})
-        </a>
-      </li>
-    </ul>
-  
-    <h2>Published Tutorials</h2>
-    <ul>
-      <li *ngFor="let tutorial of publishedTutorials">
-        {{ tutorial.title }} - {{ tutorial.description }}
-      </li>
-    </ul>
-  </div>
+<div class="add-expense">
+  <h2>Добавить новый расход</h2>
+  <form (ngSubmit)="saveExpense()">
+    <div class="form-group">
+      <label for="amount">Сумма:</label>
+      <input type="number" id="amount" class="form-control" [(ngModel)]="expense.amount" name="amount" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Описание:</label>
+      <input type="text" id="description" class="form-control" [(ngModel)]="expense.description" name="description" required>
+    </div>
+    <div class="form-group">
+      <label for="date">Дата:</label>
+      <input type="date" id="date" class="form-control" [(ngModel)]="expense.date" name="date" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+  <p *ngIf="submitted">Расход успешно добавлен!</p>
+
+  <h3>История расходов</h3>
+  <table class="table table-striped" *ngIf="expenses.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Дата</th>
+        <th>Категория</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let expense of expenses">
+        <td>{{ expense.id }}</td>
+        <td>{{ expense.amount }}</td>
+        <td>{{ expense.description }}</td>
+        <td>{{ expense.date }}</td>
+        <td>
+          <input type="text"
+                 class="form-control category-input"
+                 [ngModel]="expense.category?.name || ''"
+                 (ngModelChange)="updateCategoryName(expense, $event)"
+                 name="category-{{expense.id}}"
+                 (keyup.enter)="updateCategory(expense, expense.category?.name || '')">
+        </td>
+        <td>
+          <button *ngIf="expense.isCategoryEdited" class="btn btn-sm btn-success"
+                  (click)="updateCategory(expense, expense.category?.name)">Сохранить</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="expenses.length === 0">Нет добавленных расходов.</p>
+</div>

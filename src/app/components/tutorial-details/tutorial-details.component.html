@@ -1,18 +1,57 @@
-<div class="tutorial-details" *ngIf="tutorial">
-    <h2>Tutorial Details</h2>
-    <div>
-      <label>Title:</label>
-      <input type="text" [(ngModel)]="tutorial.title" />
-    </div>
-    <div>
-      <label>Description:</label>
-      <input type="text" [(ngModel)]="tutorial.description" />
-    </div>
-    <div>
-      <label>Published:</label>
-      <input type="checkbox" [(ngModel)]="tutorial.published" />
-    </div>
-    <button (click)="updateTutorial()">Update</button>
-    <button (click)="deleteTutorial()">Delete</button>
+<div class="analytics-controls">
+  <label for="period">Период: </label>
+  <select id="period" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
+      <option value="all">Всё время</option>
+      <option value="month">Последний месяц</option>
+      <option value="year">Последний год</option>
+  </select>
+</div>
+
+<div class="analytics" *ngIf="analytics">
+  <h2>Аналитика бюджета</h2>
+
+  <!-- Суммарные данные -->
+  <div class="summary">
+      <h3>Сводка</h3>
+      <p>Общие доходы: {{ analytics.summary.total_income }} ₽</p>
+      <p>Общие расходы: {{ analytics.summary.total_expenses }} ₽</p>
+      <p>Баланс: {{ analytics.summary.balance }} ₽</p>
   </div>
-  <p *ngIf="!tutorial">No tutorial selected or it was deleted.</p>
+
+  <!-- Распределение по категориям -->
+  <div class="category-breakdown">
+      <h3>Расходы по категориям</h3>
+      <table class="table table-striped" *ngIf="analytics.category_breakdown.length > 0">
+          <thead>
+              <tr>
+                  <th>Категория</th>
+                  <th>Сумма</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let category of analytics.category_breakdown">
+                  <td>{{ category.name }}</td>
+                  <td>{{ category.total_amount }} ₽</td>
+              </tr>
+          </tbody>
+      </table>
+      <p *ngIf="analytics.category_breakdown.length === 0">Нет данных о расходах.</p>
+  </div>
+
+  <!-- Прогноз -->
+  <div class="forecast">
+      <h3>Прогноз</h3>
+      <p>Баланс на следующий месяц: {{ analytics.forecast.next_month_balance | number:'1.2-2' }} ₽</p>
+      <p>Финансовая подушка (3 месяца): {{ analytics.forecast.financial_cushion | number:'1.2-2' }} ₽</p>
+  </div>
+
+  <!-- Рекомендации -->
+  <div class="recommendations">
+      <h3>Рекомендации</h3>
+      <ul>
+          <li *ngFor="let recommendation of analytics.recommendations">{{ recommendation }}</li>
+      </ul>
+  </div>
+</div>
+
+<p *ngIf="!analytics">Загрузка аналитики...</p>

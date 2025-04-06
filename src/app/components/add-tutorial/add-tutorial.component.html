@@ -1,19 +1,43 @@
-<div class="add-tutorial" [@fadeInOut]>
-    <h2>Добавить новый туториал</h2>
-    <form (ngSubmit)="saveTutorial()">
-      <div class="form-group">
-        <label for="title">Название:</label>
-        <input type="text" id="title" class="form-control" [(ngModel)]="tutorial.title" name="title" required>
-      </div>
-      <div class="form-group">
-        <label for="description">Описание:</label>
-        <textarea id="description" class="form-control" [(ngModel)]="tutorial.description" name="description" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="published">Опубликовано:</label>
-        <input type="checkbox" id="published" class="form-control" [(ngModel)]="tutorial.published" name="published">
-      </div>
-      <button type="submit" class="btn btn-primary">Сохранить</button>
+<div class="add-income">
+    <h2>Добавить новый доход</h2>
+    <form (ngSubmit)="saveIncome()">
+        <div class="form-group">
+            <label for="amount">Сумма:</label>
+            <input type="number" id="amount" class="form-control" [(ngModel)]="income.amount" name="amount" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Описание:</label>
+            <input type="text" id="description" class="form-control" [(ngModel)]="income.description" name="description" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Дата:</label>
+            <input type="date" id="date" class="form-control" [(ngModel)]="income.date" name="date" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
-    <p *ngIf="submitted">Туториал успешно добавлен!</p>
-  </div>
+    <p *ngIf="submitted">Доход успешно добавлен!</p>
+
+    <h3>История доходов</h3>
+    <!-- Добавим отладочную информацию -->
+    <p>Количество доходов: {{ incomes.length }}</p>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Сумма</th>
+                <th>Описание</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let income of incomes; let i = index">
+                <td>{{ i + 1 }}. ID: {{ income.id || 'нет' }}</td>
+                <td>{{ income.amount || 'нет данных' }}</td>
+                <td>{{ income.description || 'нет данных' }}</td>
+                <td>{{ income.date || 'нет данных' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="incomes.length === 0">Нет добавленных доходов.</p>
+</div>
